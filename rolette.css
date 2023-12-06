@@ -1,0 +1,24 @@
+html{
+	font-size: 14px;
+}
+#row1, #row2, #row3, #row4, #row45
+{
+	background-color: #a3cfbb;
+}
+#row5
+{
+	background-color: #ffda6a;
+}
+#row6
+{
+	background-color: #9ec5fe;
+}
+#row7
+{
+	background-color: #9eeaf9;
+}
+
+.row{
+	margin: 3px;
+	padding: 10px;	
+}
