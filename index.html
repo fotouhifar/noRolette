@@ -17,7 +17,7 @@
 	<div class="container text-center">
 		<div class="row" id="row1">
 			<div class="input-group">
-				<span class="input-group-text">Initial input $</span>
+				<span class="input-group-text igtleft">Initial input $</span>
 				<input type="number" class="form-control" id="initialInput" aria-label="Amount (to the nearest dollar)" value="1234">
 				<span class="input-group-text">.00</span>
 			</div>
@@ -25,7 +25,7 @@
 		
 		<div class="row" id="row2">
 			<div class="input-group">
-				<span class="input-group-text">Base Bet</span>
+				<span class="input-group-text igtleft">Base Bet</span>
 				<input type="number" class="form-control" id="baseBet" aria-label="Amount (to the nearest dollar)">
 				<span class="input-group-text">%</span>
 			</div>	
@@ -33,7 +33,7 @@
 	  	
 		<div class="row" id="row3">
 			<div class="input-group">
-				<span class="input-group-text">Increse Rate</span>
+				<span class="input-group-text igtleft">Increse Rate</span>
 				<input type="number" class="form-control" id="increseRate" aria-label="Amount (to the nearest dollar)">
 				<span class="input-group-text">%</span>
 			</div>	
@@ -41,7 +41,7 @@
 	  	
 		<div class="row" id="row4">
 			<div class="input-group">
-				<span class="input-group-text">Min Chip $</span>
+				<span class="input-group-text igtleft">Min Chip $</span>
 				<input type="number" class="form-control" id="minChip" aria-label="Amount (to the nearest dollar)">
 				<span class="input-group-text">.00</span>
 			</div>	
@@ -49,7 +49,7 @@
 
 		<div class="row" id="row45">
 		    <div class="col">
-				<button id="startbtn" class="btn">Start</button>
+				<button id="startbtn" class="btn btn-block">Start</button>
 			</div>
 		</div>
 
@@ -58,38 +58,31 @@
 				<table class="table">
 				  <thead>
 				    <tr>
-				      <th scope="col">1 to 18</th>
-				      <th scope="col">Even</th>
-				      <th scope="col">Red</th>
-				      <th scope="col">Black</th>
-				      <th scope="col">Odd</th>
-				      <th scope="col">19 to 36</th>
+				      <th scope="col" class="firstHalfCol">1-18</th>
+				      <th scope="col" class="evenCol">Even</th>
+				      <th scope="col" class="redCol">Red</th>
+				      <th scope="col" class="blackCol">Black</th>
+				      <th scope="col" class="oddCol">Odd</th>
+				      <th scope="col" class="secondHalfCol">19-36</th>
 				    </tr>
 				  </thead>
 				  <tbody>
 				    <tr>
-				      <td id="firstHalf">0</td>
-				      <td id="evenNumbers">0</td>
-				      <td id="redNumbers">0</td>
-				      <td id="blackNumbers">0</td>
-				      <td id="oddNumbers">0</td>
-				      <td id="secondHalf">0</td>
+				      <td id="firstHalf" class="firstHalfCol"><div class="selected">0</div></td>
+				      <td id="evenNumbers" class="evenCol"><div class="selected">0</div></td>
+				      <td id="redNumbers" class="redCol selected"><div class="selected">0</div></td>
+				      <td id="blackNumbers" class="blackCol unselected"><div class="selected">0</div></td>
+				      <td id="oddNumbers" class="oddCol"><div class="selected">0</div></td>
+				      <td id="secondHalf" class="secondHalfCol"><div class="selected">0</div></td>
 				    </tr>
 				  </tbody>
 				</table>								
 			</div>			
 		</div>
 		
-		
-		
-		<div class="row" id="row6">
+ 		<div class="row" id="row6">
 		    <div class="col">
-		      <label>Result
-				  
-				  		      <input id="result" type="number">
-
-			  </label>
-
+		      <label>Result<input id="result" type="number"></label>
 			</div>
 		</div>
 		
@@ -108,25 +101,19 @@
 				</div>
 			</div>
 		</div>
+		<div class="row" id="row8" hidden>
+		    <div class="col">
+				<button id="nextbtn" class="btn btn-block">Next</button>
+			</div>
+		</div>
+
 		
 		
 		
 	</div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-  </body>
+
+
+</body>
   <footer>	
 	  <script src="rolette.js"></script>
 
