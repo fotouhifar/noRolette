@@ -22,6 +22,12 @@ table{
 	font-size: 16px;
 
 }
+.selected{
+	background-color: #92e79d;
+}
+.unselected{
+	background-color: #6d796f;
+}
 
 .row{
 	margin: 3px;

@@ -18,13 +18,19 @@ function initiate(){
 }
 
 //*****************************************************************
-// Click on START Button
+// Click on NEXT Button
 $("#nextbtn").on("click", function() {
+  newChoice = rolle()
+
 	lastResult = $("#result").val()
+
 
   if(0<= lastResult && lastResult <= 36 && lastResult != '')
   {
     console.log("Next Game!")
+    history.push(getResult())
+
+
     first_bet();
 
   }
@@ -33,8 +39,63 @@ $("#nextbtn").on("click", function() {
 });
 
 //*****************************************************************
+// Get Result string
+function getResult(){
+  resultString = 'Rolle = ' + lastResult + ', Choice = ' + newChoice
+  console.log("lastResult from func",lastResult)
+  // First half
+  if(is_first_half(newChoice) && is_first_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_first_half(newChoice) && !is_first_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+  // First half
+  if(is_first_half(newChoice) && is_first_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_first_half(newChoice) && !is_first_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+  // First half
+  if(is_first_half(newChoice) && is_first_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_first_half(newChoice) && !is_first_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+  // First half
+  if(is_first_half(newChoice) && is_first_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_first_half(newChoice) && !is_first_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+  // First half
+  if(is_first_half(newChoice) && is_first_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_first_half(newChoice) && !is_first_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+  // Second half
+  if(is_second_half(newChoice) && is_second_half(lastResult)) 
+    resultString += 'W '; 
+  else if (is_second_half(newChoice) && !is_second_half(lastResult))
+    resultString +='L '
+  else resultString +='- '
+
+
+
+  console.log("resultString = ",resultString)
+
+
+
+}
+//*****************************************************************
 // Click on START Button
 $("#startbtn").on("click", function() {
+  newChoice = rolle()
 
 
   initialInput = $("#initialInput").val();
@@ -67,10 +128,8 @@ $("#startbtn").on("click", function() {
 // Fill out first bets
 function first_bet(){
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
-  newChoice = rolle()
 	$("#result").val()
-
-
+  
   $("#firstHalf > div").text(minBet*is_first_half(newChoice))
   $("#secondHalf > div").text(minBet* is_second_half(newChoice))
 
@@ -79,8 +138,63 @@ function first_bet(){
 
   $("#redNumbers > div").text(minBet*is_red(newChoice))
   $("#blackNumbers > div").text(minBet* is_black(newChoice))
+
+  setBetBGColors()
+
+  
+
+
+
+
   console.log("newChoice =",newChoice);
   
+}
+
+
+//*****************************************************************
+// Rolle a new number
+function setBetBGColors(){
+  console.log("newChoice in setBG=",newChoice)
+  if(is_first_half(newChoice)){
+    $("#firstHalf > div").addClass("selected");
+    $("#firstHalf > div").removeClass("unselected");
+    $("#secondHalf > div").addClass("unselected");
+    $("#secondHalf > div").removeClass("selected");
+  }
+  if(is_second_half(newChoice)){
+    $("#firstHalf > div").addClass("unselected");
+    $("#firstHalf > div").removeClass("selected");
+    $("#secondHalf > div").addClass("selected");
+    $("#secondHalf > div").removeClass("unselected");
+  }
+  if(is_red(newChoice)){
+    $("#redNumbers > div").addClass("selected");
+    $("#redNumbers > div").removeClass("unselected");
+    $("#blackNumbers > div").addClass("unselected");
+    $("#blackNumbers > div").removeClass("selected");
+  }
+  if(is_black(newChoice)){
+    $("#redNumbers > div").addClass("unselected");
+    $("#redNumbers > div").removeClass("selected");
+    $("#blackNumbers > div").addClass("selected");
+    $("#blackNumbers > div").removeClass("unselected");
+  }
+  if(is_even(newChoice)){
+    $("#evenNumbers > div").addClass("selected");
+    $("#evenNumbers > div").removeClass("unselected");
+    $("#oddNumbers > div").addClass("unselected");
+    $("#oddNumbers > div").removeClass("selected");
+  }
+  if(is_odd(newChoice)){
+    $("#evenNumbers > div").addClass("selected");
+    $("#evenNumbers > div").removeClass("unselected");
+    $("#oddNumbers > div").addClass("unselected");
+    $("#oddNumbers > div").removeClass("selected");
+  }
+
+
+
+
 }
 
 //*****************************************************************
