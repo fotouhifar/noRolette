@@ -6,9 +6,32 @@ var minChip = 0;
 var ballance = 0;
 var minBet = 0;
 
+var lastBets={
+  firstHalf: 0,
+  secondHalf: 0,
+  even: 0,
+  odd: 0,
+  red: 0,
+  black: 0
+}
+var newBets={
+  firstHalf: 0,
+  secondHalf: 0,
+  even: 0,
+  odd: 0,
+  red: 0,
+  black: 0
+}
+var lastOutcome={
+  firstHalf: '-',
+  secondHalf: '-',
+  even: '-',
+  odd: '-',
+  red: '-',
+  black: '-'
+}
 var newChoice = 0;
 var lastChoice = 0;
-
 
 //*****************************************************************
 // Initiate the game
@@ -57,48 +80,49 @@ function getResult(){
   console.log("lastChoice from func",lastChoice)
   // First half
   if(is_first_half(lastChoice) && is_first_half(lastResult)) 
-    resultString += 'W '; 
+    lastOutcome.firstHalf= 'W'
   else if (is_first_half(lastChoice) && !is_first_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+    lastOutcome.firstHalf= 'L'
+  else lastOutcome.firstHalf= '-'
 
-  // First half
-  if(is_first_half(lastChoice) && is_first_half(lastResult)) 
-    resultString += 'W '; 
-  else if (is_first_half(lastChoice) && !is_first_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+  // Even
+  if(is_even(lastChoice) && is_even(lastResult)) 
+    lastOutcome.even= 'W'; 
+  else if (is_even(lastChoice) && !is_even(lastResult))
+    lastOutcome.even= 'L'
+  else lastOutcome.even= '-'
 
-  // First half
-  if(is_first_half(lastChoice) && is_first_half(lastResult)) 
-    resultString += 'W '; 
-  else if (is_first_half(lastChoice) && !is_first_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+  // Red
+  if(is_red(lastChoice) && is_red(lastResult)) 
+    lastOutcome.red= 'W'; 
+  else if (is_red(lastChoice) && !is_red(lastResult))
+    lastOutcome.red= 'L'
+  else lastOutcome.red= '-'
 
-  // First half
-  if(is_first_half(lastChoice) && is_first_half(lastResult)) 
-    resultString += 'W '; 
-  else if (is_first_half(lastChoice) && !is_first_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+  // Black
+  if(is_black(lastChoice) && is_black(lastResult)) 
+    lastOutcome.black= 'W'; 
+  else if (is_black(lastChoice) && !is_black(lastResult))
+  lastOutcome.black= 'L'
+  else lastOutcome.black= '-'
 
-  // First half
-  if(is_first_half(lastChoice) && is_first_half(lastResult)) 
-    resultString += 'W '; 
-  else if (is_first_half(lastChoice) && !is_first_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+  // Odd
+  if(is_odd(lastChoice) && is_odd(lastResult)) 
+    lastOutcome.odd= 'W'; 
+  else if (is_odd(lastChoice) && !is_odd(lastResult))
+    lastOutcome.odd= 'L'
+  else lastOutcome.odd= '-'
 
   // Second half
   if(is_second_half(lastChoice) && is_second_half(lastResult)) 
-    resultString += 'W '; 
+    lastOutcome.secondHalf= 'W'; 
   else if (is_second_half(lastChoice) && !is_second_half(lastResult))
-    resultString +='L '
-  else resultString +='- '
+    lastOutcome.secondHalf= 'L'
+  else lastOutcome.secondHalf= '-'
 
-
-
+  for (var key in lastOutcome)
+    resultString += lastOutcome[key]
+ 
   console.log("resultString = ",resultString)
   return resultString+'\n'
 
@@ -141,26 +165,31 @@ $("#startbtn").on("click", function() {
 // Fill out first bets
 function first_bet(){
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
-	$("#result").val()
-  
-  $("#firstHalf > div").text(minBet*is_first_half(newChoice))
-  $("#secondHalf > div").text(minBet* is_second_half(newChoice))
+  newBets.firstHalf = minBet*is_first_half(newChoice)
+  newBets.secondHalf = minBet* is_second_half(newChoice)
+  newBets.even = minBet*is_even(newChoice)
+  newBets.odd = minBet* is_odd(newChoice)
+  newBets.red = minBet*is_red(newChoice)
+  newBets.black = minBet* is_black(newChoice)
 
-  $("#evenNumbers > div").text(minBet*is_even(newChoice))
-  $("#oddNumbers > div").text(minBet* is_odd(newChoice))
-
-  $("#redNumbers > div").text(minBet*is_red(newChoice))
-  $("#blackNumbers > div").text(minBet* is_black(newChoice))
-
-  setBetBGColors()
-  console.log("newChoice =",newChoice); 
+  setBetValues()
   return newChoice
 
 }
 //*****************************************************************
-// Fill out first bets
+// Fill out next bets based on previous bet and results
 function next_bet(){
+  lastBets= newBets
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
+  
+
+  setBetValues()
+  return newChoice
+
+}
+//*****************************************************************
+// set bet values
+function setBetValues(){
 	$("#result").val()
   
   $("#firstHalf > div").text(minBet*is_first_half(newChoice))
@@ -174,8 +203,6 @@ function next_bet(){
 
   setBetBGColors()
   console.log("newChoice =",newChoice); 
-  return newChoice
-
 }
 
 //*****************************************************************
