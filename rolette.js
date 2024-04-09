@@ -6,6 +6,9 @@ var minChip = 0;
 var ballance = 0;
 var minBet = 0;
 
+var keys=['firstHalf','even','red','black','odd','secondHalf']
+
+
 var lastBets={
   firstHalf: 0,
   secondHalf: 0,
@@ -13,6 +16,11 @@ var lastBets={
   odd: 0,
   red: 0,
   black: 0
+}
+var betAmount={
+  firstOrSecond : 0,
+  oddOrEven : 0,
+  redOrBlack : 0
 }
 var newBets={
   firstHalf: 0,
@@ -61,6 +69,9 @@ $("#nextbtn").on("click", function() {
   if(0<= lastResult && lastResult <= 36 && lastResult != '')
   {
     history.unshift(getResult())
+    //To update amounts, minbet, etc.
+    updateBettingValues();
+
     console.log("Next Game!")
 
 
@@ -71,25 +82,36 @@ $("#nextbtn").on("click", function() {
   $("#result").val('')
 
 });
+//*****************************************************************
+// Get Result string
+function updateBettingValues(){
+  
+  //initialInput = 0;
+  //baseBetvalue = 0;
+  //increseRate = 0;
+  //minChip = 0;
+  ballance = 0;
 
+  if(lastResult.firstHalf == 'W')
+    ballance += lastBets.firstHalf
+  else if(lastResult.firstHalf == 'L')
+    ballance -= lastBets.firstHalf
+
+  minBet = 0;
+
+
+}
 //*****************************************************************
 // Get Result string
 function getResult(){
-  console.log(typeof(lastResult))
-  console.log(typeof(lastChoice))
   resultString = 'Rolle = ' + lastResult + ', Choice = ' + lastChoice
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
+
   // First half
   if(is_first_half(lastChoice) && is_first_half(lastResult)) 
     lastOutcome.firstHalf= 'W'
   else if (is_first_half(lastChoice) && !is_first_half(lastResult))
     lastOutcome.firstHalf= 'L'
   else lastOutcome.firstHalf= '-'
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
 
   // Even
   if(is_even(lastChoice) && is_even(lastResult)) 
@@ -98,9 +120,6 @@ function getResult(){
     lastOutcome.even= 'L'
   else lastOutcome.even= '-'
 
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
   // Red
   if(is_red(lastChoice) && is_red(lastResult)) 
     lastOutcome.red= 'W'; 
@@ -108,9 +127,6 @@ function getResult(){
     lastOutcome.red= 'L'
   else lastOutcome.red= '-'
 
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
   // Black
   if(is_black(lastChoice) && is_black(lastResult)) 
     lastOutcome.black= 'W'; 
@@ -118,9 +134,6 @@ function getResult(){
   lastOutcome.black= 'L'
   else lastOutcome.black= '-'
 
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
   // Odd
   if(is_odd(lastChoice) && is_odd(lastResult)) 
     lastOutcome.odd= 'W'; 
@@ -128,9 +141,6 @@ function getResult(){
     lastOutcome.odd= 'L'
   else lastOutcome.odd= '-'
 
-  console.log("lastResult from func",lastResult)
-  console.log("lastChoice from func",lastChoice)
-  console.log("lastOutcome=",lastOutcome)
   // Second half
   if(is_second_half(lastChoice) && is_second_half(lastResult)) 
     lastOutcome.secondHalf= 'W'; 
@@ -138,9 +148,7 @@ function getResult(){
     lastOutcome.secondHalf= 'L'
   else lastOutcome.secondHalf= '-'
 
-  console.log("lastOutcome= ",lastOutcome)
   resultString +=', Result= '
-  keys=['firstHalf','even','red','black','odd','secondHalf']
 
   for (var i=0 ; i<6; i++)
     resultString += lastOutcome[keys[i]]
@@ -188,12 +196,11 @@ $("#startbtn").on("click", function() {
 // Fill out first bets
 function first_bet(){
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
-  newBets.firstHalf = minBet*is_first_half(newChoice)
-  newBets.secondHalf = minBet* is_second_half(newChoice)
-  newBets.even = minBet*is_even(newChoice)
-  newBets.odd = minBet* is_odd(newChoice)
-  newBets.red = minBet*is_red(newChoice)
-  newBets.black = minBet* is_black(newChoice)
+  betAmount.firstOrSecond = minBet
+  betAmount.oddOrEven = minBet
+  betAmount.redOrBlack = minBet
+
+
 
 
   setBetValues()
@@ -214,8 +221,27 @@ function next_bet(){
 //*****************************************************************
 // set bet values
 function setBetValues(){
+
+  newBets.firstHalf = betAmount.firstOrSecond*is_first_half(newChoice)
+  newBets.secondHalf = betAmount.firstOrSecond* is_second_half(newChoice)
+  newBets.even = betAmount.oddOrEven*is_even(newChoice)
+  newBets.odd = betAmount.oddOrEven* is_odd(newChoice)
+  newBets.red = betAmount.redOrBlack*is_red(newChoice)
+  newBets.black = betAmount.redOrBlack* is_black(newChoice)
+
+  console.log('ballance = ',ballance)
+  for(i=0;i<6;i++){
+    console.log(newBets[keys[i]])
+    ballance -= parseInt(newBets[keys[i]])
+  }
+
+  console.log('ballance = ',ballance)
+
+
 	$("#result").val()
   
+
+
   $("#firstHalf > div").text(minBet*is_first_half(newChoice))
   $("#secondHalf > div").text(minBet* is_second_half(newChoice))
 
@@ -292,35 +318,23 @@ $( document ).ready(function() {
 
 //*****************************************************************
 function is_first_half(value){
-  if(value < 19)
-    console.log(value, " is first half")
   return value < 19
 }
 function is_second_half(value){
-  if(value >= 19)
-    console.log(value, " is second half")
   return value >= 19
 }
 
 function is_red(value){
-  if([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(value))
-    console.log(value, " is red")
   return [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(value)
 }
 function is_black(value){
-  if([2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35].includes(value))
-    console.log(value, " is black")
   return [2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35].includes(value)
 }
 
 function is_odd(value){
-  if(value % 2 == 1)
-    console.log(value, " is odd")
   return value % 2 == 1
 }
 function is_even(value){
-  if(value % 2 == 0)
-    console.log(value, " is even")
   return value % 2 == 0
 }
 function next_choice(){
