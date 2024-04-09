@@ -47,7 +47,7 @@ $("#nextbtn").on("click", function() {
   lastChoice = newChoice
   newChoice = rolle()
 
-	lastResult = $("#result").val()
+	lastResult = parseInt($("#result").val())
 
   if(isNaN(parseFloat(lastResult)))
   {
@@ -60,8 +60,8 @@ $("#nextbtn").on("click", function() {
 
   if(0<= lastResult && lastResult <= 36 && lastResult != '')
   {
-    console.log("Next Game!")
     history.unshift(getResult())
+    console.log("Next Game!")
 
 
     next_bet();
@@ -75,15 +75,21 @@ $("#nextbtn").on("click", function() {
 //*****************************************************************
 // Get Result string
 function getResult(){
+  console.log(typeof(lastResult))
+  console.log(typeof(lastChoice))
   resultString = 'Rolle = ' + lastResult + ', Choice = ' + lastChoice
   console.log("lastResult from func",lastResult)
   console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
   // First half
   if(is_first_half(lastChoice) && is_first_half(lastResult)) 
     lastOutcome.firstHalf= 'W'
   else if (is_first_half(lastChoice) && !is_first_half(lastResult))
     lastOutcome.firstHalf= 'L'
   else lastOutcome.firstHalf= '-'
+  console.log("lastResult from func",lastResult)
+  console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
 
   // Even
   if(is_even(lastChoice) && is_even(lastResult)) 
@@ -92,6 +98,9 @@ function getResult(){
     lastOutcome.even= 'L'
   else lastOutcome.even= '-'
 
+  console.log("lastResult from func",lastResult)
+  console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
   // Red
   if(is_red(lastChoice) && is_red(lastResult)) 
     lastOutcome.red= 'W'; 
@@ -99,6 +108,9 @@ function getResult(){
     lastOutcome.red= 'L'
   else lastOutcome.red= '-'
 
+  console.log("lastResult from func",lastResult)
+  console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
   // Black
   if(is_black(lastChoice) && is_black(lastResult)) 
     lastOutcome.black= 'W'; 
@@ -106,6 +118,9 @@ function getResult(){
   lastOutcome.black= 'L'
   else lastOutcome.black= '-'
 
+  console.log("lastResult from func",lastResult)
+  console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
   // Odd
   if(is_odd(lastChoice) && is_odd(lastResult)) 
     lastOutcome.odd= 'W'; 
@@ -113,6 +128,9 @@ function getResult(){
     lastOutcome.odd= 'L'
   else lastOutcome.odd= '-'
 
+  console.log("lastResult from func",lastResult)
+  console.log("lastChoice from func",lastChoice)
+  console.log("lastOutcome=",lastOutcome)
   // Second half
   if(is_second_half(lastChoice) && is_second_half(lastResult)) 
     lastOutcome.secondHalf= 'W'; 
@@ -120,8 +138,12 @@ function getResult(){
     lastOutcome.secondHalf= 'L'
   else lastOutcome.secondHalf= '-'
 
-  for (var key in lastOutcome)
-    resultString += lastOutcome[key]
+  console.log("lastOutcome= ",lastOutcome)
+  resultString +=', Result= '
+  keys=['firstHalf','even','red','black','odd','secondHalf']
+
+  for (var i=0 ; i<6; i++)
+    resultString += lastOutcome[keys[i]]
  
   console.log("resultString = ",resultString)
   return resultString+'\n'
@@ -159,6 +181,7 @@ $("#startbtn").on("click", function() {
 
   first_bet()
   
+
 } );
 
 //*****************************************************************
@@ -172,19 +195,20 @@ function first_bet(){
   newBets.red = minBet*is_red(newChoice)
   newBets.black = minBet* is_black(newChoice)
 
-  setBetValues()
-  return newChoice
 
+  setBetValues()
 }
 //*****************************************************************
 // Fill out next bets based on previous bet and results
 function next_bet(){
   lastBets= newBets
+
+  newChoice = rolle()
+
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
   
 
   setBetValues()
-  return newChoice
 
 }
 //*****************************************************************
@@ -202,13 +226,11 @@ function setBetValues(){
   $("#blackNumbers > div").text(minBet* is_black(newChoice))
 
   setBetBGColors()
-  console.log("newChoice =",newChoice); 
 }
 
 //*****************************************************************
 // Rolle a new number
 function setBetBGColors(){
-  console.log("newChoice in setBG=",newChoice)
   if(is_first_half(newChoice)){
     $("#firstHalf > div").addClass("selected");
     $("#firstHalf > div").removeClass("unselected");
@@ -270,23 +292,35 @@ $( document ).ready(function() {
 
 //*****************************************************************
 function is_first_half(value){
+  if(value < 19)
+    console.log(value, " is first half")
   return value < 19
 }
 function is_second_half(value){
+  if(value >= 19)
+    console.log(value, " is second half")
   return value >= 19
 }
 
 function is_red(value){
+  if([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(value))
+    console.log(value, " is red")
   return [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(value)
 }
 function is_black(value){
+  if([2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35].includes(value))
+    console.log(value, " is black")
   return [2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35].includes(value)
 }
 
 function is_odd(value){
+  if(value % 2 == 1)
+    console.log(value, " is odd")
   return value % 2 == 1
 }
 function is_even(value){
+  if(value % 2 == 0)
+    console.log(value, " is even")
   return value % 2 == 0
 }
 function next_choice(){
