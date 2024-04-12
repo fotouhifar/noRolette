@@ -61,7 +61,7 @@ $("#nextbtn").on("click", function() {
   {
     return null
   }
-  if(parseFloat(lastResult) <1 || parseFloat(lastResult) > 36)
+  if(parseFloat(lastResult) <0 || parseFloat(lastResult) > 36)
   {
     return null
   }
@@ -90,10 +90,14 @@ function updateBettingValues(){
   //baseBetvalue = 0;
   //increseRate = 0;
   //minChip = 0;
-  ballance = 0;
+
+  console.log("lastResult= ",lastResult)
+  console.log("ballance= ",ballance)
+  console.log("betAmount= ",betAmount)
 
   if(lastResult.firstHalf == 'W')
     ballance += lastBets.firstHalf
+
   else if(lastResult.firstHalf == 'L')
     ballance -= lastBets.firstHalf
 
@@ -165,10 +169,10 @@ $("#startbtn").on("click", function() {
   newChoice = rolle()
 
 
-  initialInput = $("#initialInput").val();
-  baseBetvalue = $("#baseBet").val();
-  increseRate = $("#increseRate").val();
-  minChip = $("#minChip").val();
+  initialInput = parseInt($("#initialInput").val());
+  baseBetvalue = parseInt($("#baseBet").val());
+  increseRate = 100 + parseInt($("#increseRate").val());
+  minChip = parseInt($("#minChip").val());
   ballance = initialInput
 
   /*
@@ -202,7 +206,6 @@ function first_bet(){
 
 
 
-
   setBetValues()
 }
 //*****************************************************************
@@ -214,6 +217,20 @@ function next_bet(){
 
   minBet = Math.round(Math.max(ballance*baseBetvalue/300 , minChip),0);
   
+  if(lastResult.firstHalf == 'L' || lastResult.secondHalf=='L')
+    betAmount.firstOrSecond *= increseRate
+  else
+    betAmount.firstOrSecond = minBet
+
+  if(lastResult.redOrBlack == 'L' || lastResult.redOrBlack=='L')
+    betAmount.redOrBlack *= increseRate
+  else
+    betAmount.redOrBlack = minBet
+
+    if(lastResult.oddOrEven == 'L' || lastResult.oddOrEven=='L')
+    betAmount.oddOrEven *= increseRate
+  else
+    betAmount.oddOrEven = minBet
 
   setBetValues()
 
@@ -227,7 +244,7 @@ function setBetValues(){
   newBets.even = betAmount.oddOrEven*is_even(newChoice)
   newBets.odd = betAmount.oddOrEven* is_odd(newChoice)
   newBets.red = betAmount.redOrBlack*is_red(newChoice)
-  newBets.black = betAmount.redOrBlack* is_black(newChoice)
+  newBets.black = betAmount.redOrBlack*is_black(newChoice)
 
   console.log('ballance = ',ballance)
   for(i=0;i<6;i++){
@@ -237,19 +254,16 @@ function setBetValues(){
 
   console.log('ballance = ',ballance)
 
-
 	$("#result").val()
   
+  $("#firstHalf > div").text(newBets.firstHalf)
+  $("#secondHalf > div").text(newBets.secondHalf)
 
+  $("#evenNumbers > div").text(newBets.even)
+  $("#oddNumbers > div").text(newBets.odd)
 
-  $("#firstHalf > div").text(minBet*is_first_half(newChoice))
-  $("#secondHalf > div").text(minBet* is_second_half(newChoice))
-
-  $("#evenNumbers > div").text(minBet*is_even(newChoice))
-  $("#oddNumbers > div").text(minBet* is_odd(newChoice))
-
-  $("#redNumbers > div").text(minBet*is_red(newChoice))
-  $("#blackNumbers > div").text(minBet* is_black(newChoice))
+  $("#redNumbers > div").text(newBets.red)
+  $("#blackNumbers > div").text(newBets.black)
 
   setBetBGColors()
 }
